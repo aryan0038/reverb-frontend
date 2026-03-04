@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useUser, SignIn, UserButton, useAuth } from '@clerk/clerk-react';
 
 const App = () => {
+  const { isSignedIn, isLoaded } = useUser();
+  const { getToken } = useAuth();
+
   const [page, setPage] = useState('rephrase');
   const [history, setHistory] = useState([]);
   const [originalText, setOriginalText] = useState('');
@@ -11,12 +15,56 @@ const App = () => {
   const [charCount, setCharCount] = useState(0);
 
   const MAX_CHARS = 2000;
-  const API_BASE = 'https://reverb-backend-production-77be.up.railway.app';
-  useEffect(() => { fetchHistory(); }, []);
+  const API_BASE = 'https://reverb-backend-production.up.railway.app';
+
+  useEffect(() => {
+    if (isSignedIn) fetchHistory();
+  }, [isSignedIn]);
+
+  // ── ALL hooks above this line ──────────────────────────
+
+  if (!isLoaded) return null;
+
+  if (!isSignedIn) return (
+    <div style={{
+      minHeight: '100vh',
+      width: '100vw',
+      background: '#030712',
+      backgroundImage: 'linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px)',
+      backgroundSize: '40px 40px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+    }}>
+      <div style={{
+        fontFamily: 'Orbitron, sans-serif',
+        fontSize: '1.8rem',
+        fontWeight: '900',
+        color: '#00f2ff',
+        textShadow: '0 0 20px #00f2ff',
+        letterSpacing: '6px',
+        marginBottom: '8px',
+      }}>REVERB</div>
+      <div style={{
+        fontSize: '0.65rem',
+        color: 'rgba(226,232,240,0.4)',
+        letterSpacing: '3px',
+        marginBottom: '36px',
+      }}>AI REPHRASING ENGINE</div>
+      <SignIn />
+    </div>
+  );
+
+  // ── Functions (after auth check, before main return) ───
 
   const fetchHistory = async () => {
     try {
-      const res = await fetch(`${API_BASE}/history`);
+      const token = await getToken();
+      const res = await fetch(`${API_BASE}/history`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const data = await res.json();
       setHistory(data);
     } catch (err) { console.error("History sync failed", err); }
@@ -34,9 +82,13 @@ const App = () => {
     setLoading(true);
     setRephrasedResult('');
     try {
+      const token = await getToken();
       const res = await fetch(`${API_BASE}/rephrase`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({ originalText, tone }),
       });
       const data = await res.json();
@@ -48,7 +100,11 @@ const App = () => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`${API_BASE}/history/${id}`, { method: 'DELETE' });
+      const token = await getToken();
+      await fetch(`${API_BASE}/history/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
       fetchHistory();
     } catch (err) { console.error("Delete failed", err); }
   };
@@ -531,84 +587,6 @@ const App = () => {
         }
 
         .dev-tag { font-size: 0.8rem; color: var(--muted); }
-       .dev-name {
-          font-family: 'Orbitron', sans-serif;
-          font-size: 1.2rem;
-          color: var(--cyan);
-          letter-spacing: 3px;
-          margin-bottom: 8px;
-        }
-
-        .dev-tag { font-size: 0.8rem; color: var(--muted); }
-
-        /* --- MOBILE RESPONSIVE FIXES --- */
-        @media (max-width: 768px) {
-          .layout {
-            flex-direction: column;
-          }
-          
-          /* Change sidebar to a block element to stop forced vertical stacking */
-          .sidebar {
-            position: relative;
-            width: 100%;
-            min-height: auto;
-            border-right: none;
-            border-bottom: 1px solid var(--border);
-            padding: 15px;
-            display: block; 
-            text-align: center;
-          }
-          
-          /* Make navigation items sit nicely in a row */
-          .nav {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-          }
-          .nav-item { padding: 8px 12px; font-size: 0.8rem; }
-          .logo { margin-bottom: 0; }
-          
-          /* Put tone buttons in a horizontal row */
-          .sidebar-label { margin-top: 10px; margin-bottom: 10px; }
-          .tone-btn {
-            width: 31%;
-            display: inline-block;
-            margin: 0 1%;
-            padding: 8px 0;
-            font-size: 0.75rem;
-          }
-          
-          /* Hide non-essential elements to bring the textbox higher up */
-          .char-counter, 
-          .dev-credit, 
-          .logo-sub, 
-          .sidebar-divider {
-            display: none;
-          }
-          
-          /* Fix the main content area */
-          .main {
-            margin-left: 0;
-            width: 100%;
-            padding: 20px 15px;
-          }
-          
-          /* Stack the output panes and history cards */
-          .comparison-grid, 
-          .history-texts, 
-          .features-grid {
-            grid-template-columns: 1fr;
-            gap: 15px;
-          }
-          
-          /* Adjust textarea for mobile thumbs */
-          textarea { height: 150px; font-size: 1rem; }
-          .about-title { font-size: 2rem; }
-        }
-
       `}</style>
 
       <div className="layout">
@@ -654,6 +632,9 @@ const App = () => {
             <div className="char-nums">{charCount} / {MAX_CHARS}</div>
           </div>
 
+          <div style={{ marginBottom: '16px' }}>
+            <UserButton afterSignOutUrl="/" showName />
+          </div>
           <div className="dev-credit">
             Developed by<br />
             <span>Sujal Das</span><br />
