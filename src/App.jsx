@@ -302,6 +302,17 @@ const App = () => {
 
         .char-nums { font-size: 0.7rem; color: var(--muted); text-align: right; }
 
+        /* AUTH WRAPPER FOR PROFILE BUTTON */
+        .auth-wrapper {
+          margin-top: 25px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          padding: 10px;
+          clear: both;
+        }
+
         .dev-credit {
           font-size: 0.65rem;
           color: rgba(255,255,255,0.2);
@@ -587,6 +598,7 @@ const App = () => {
         }
 
         .dev-tag { font-size: 0.8rem; color: var(--muted); }
+
         /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
           .layout { flex-direction: column; }
@@ -620,6 +632,11 @@ const App = () => {
             margin: 0 1%;
             padding: 8px 0;
             font-size: 0.75rem;
+          }
+
+          .auth-wrapper {
+            margin-top: 15px;
+            padding: 5px;
           }
           
           .char-counter, .dev-credit, .logo-sub, .sidebar-divider {
@@ -685,9 +702,10 @@ const App = () => {
             <div className="char-nums">{charCount} / {MAX_CHARS}</div>
           </div>
 
-          <div style={{ marginBottom: '16px' }}>
+          <div className="auth-wrapper">
             <UserButton afterSignOutUrl="/" showName />
           </div>
+
           <div className="dev-credit">
             Developed by<br />
             <span>Sujal Das</span><br />
