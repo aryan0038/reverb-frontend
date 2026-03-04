@@ -15,7 +15,7 @@ const App = () => {
   const [charCount, setCharCount] = useState(0);
 
   const MAX_CHARS = 2000;
-  const API_BASE = 'https://reverb-backend-production.up.railway.app';
+  const API_BASE = 'https://reverb-backend-production-77be.up.railway.app';
 
   useEffect(() => {
     if (isSignedIn) fetchHistory();
