@@ -531,52 +531,72 @@ const App = () => {
         }
 
         .dev-tag { font-size: 0.8rem; color: var(--muted); }
+       .dev-name {
+          font-family: 'Orbitron', sans-serif;
+          font-size: 1.2rem;
+          color: var(--cyan);
+          letter-spacing: 3px;
+          margin-bottom: 8px;
+        }
+
+        .dev-tag { font-size: 0.8rem; color: var(--muted); }
+
         /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
-          /* Stack layout vertically */
           .layout {
             flex-direction: column;
           }
           
-          /* Change sidebar into a top navigation bar */
+          /* Change sidebar to a block element to stop forced vertical stacking */
           .sidebar {
             position: relative;
             width: 100%;
             min-height: auto;
             border-right: none;
             border-bottom: 1px solid var(--border);
-            padding: 20px;
+            padding: 15px;
+            display: block; 
+            text-align: center;
           }
           
-          /* Make navigation items sit side-by-side */
+          /* Make navigation items sit nicely in a row */
           .nav {
+            display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
+            margin-top: 15px;
+            margin-bottom: 15px;
           }
-          .nav-item { padding: 8px 12px; }
-          .logo-sub { margin-bottom: 20px; text-align: center; }
-          .logo { text-align: center; }
+          .nav-item { padding: 8px 12px; font-size: 0.8rem; }
+          .logo { margin-bottom: 0; }
           
-          /* Put tone buttons in a row */
-          .sidebar-label { text-align: center; margin-top: 10px; }
+          /* Put tone buttons in a horizontal row */
+          .sidebar-label { margin-top: 10px; margin-bottom: 10px; }
           .tone-btn {
             width: 31%;
             display: inline-block;
-            margin: 1%;
-            text-align: center;
-            padding: 8px 4px;
+            margin: 0 1%;
+            padding: 8px 0;
+            font-size: 0.75rem;
+          }
+          
+          /* Hide non-essential elements to bring the textbox higher up */
+          .char-counter, 
+          .dev-credit, 
+          .logo-sub, 
+          .sidebar-divider {
+            display: none;
           }
           
           /* Fix the main content area */
           .main {
             margin-left: 0;
             width: 100%;
-            padding: 20px;
+            padding: 20px 15px;
           }
           
-          /* Make grids stack vertically instead of side-by-side */
+          /* Stack the output panes and history cards */
           .comparison-grid, 
           .history-texts, 
           .features-grid {
@@ -584,13 +604,11 @@ const App = () => {
             gap: 15px;
           }
           
-          /* Shrink text areas slightly for mobile */
-          textarea { height: 160px; }
+          /* Adjust textarea for mobile thumbs */
+          textarea { height: 150px; font-size: 1rem; }
           .about-title { font-size: 2rem; }
-          
-          /* Hide character counter on mobile to save screen space */
-          .char-counter { display: none; }
         }
+
       `}</style>
 
       <div className="layout">
