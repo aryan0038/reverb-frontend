@@ -587,6 +587,59 @@ const App = () => {
         }
 
         .dev-tag { font-size: 0.8rem; color: var(--muted); }
+        /* --- MOBILE RESPONSIVE FIXES --- */
+        @media (max-width: 768px) {
+          .layout { flex-direction: column; }
+          
+          .sidebar {
+            position: relative;
+            width: 100%;
+            min-height: auto;
+            border-right: none;
+            border-bottom: 1px solid var(--border);
+            padding: 15px;
+            display: block; 
+            text-align: center;
+          }
+          
+          .nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+          }
+          .nav-item { padding: 8px 12px; font-size: 0.8rem; }
+          .logo { margin-bottom: 0; }
+          
+          .sidebar-label { margin-top: 10px; margin-bottom: 10px; }
+          .tone-btn {
+            width: 31%;
+            display: inline-block;
+            margin: 0 1%;
+            padding: 8px 0;
+            font-size: 0.75rem;
+          }
+          
+          .char-counter, .dev-credit, .logo-sub, .sidebar-divider {
+            display: none;
+          }
+          
+          .main {
+            margin-left: 0;
+            width: 100%;
+            padding: 20px 15px;
+          }
+          
+          .comparison-grid, .history-texts, .features-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+          }
+          
+          textarea { height: 150px; font-size: 1rem; }
+          .about-title { font-size: 2rem; }
+        }
       `}</style>
 
       <div className="layout">
