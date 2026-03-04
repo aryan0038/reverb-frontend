@@ -12,7 +12,6 @@ const App = () => {
 
   const MAX_CHARS = 2000;
   const API_BASE = 'https://reverb-backend-production-77be.up.railway.app';
-
   useEffect(() => { fetchHistory(); }, []);
 
   const fetchHistory = async () => {
