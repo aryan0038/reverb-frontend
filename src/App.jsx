@@ -531,6 +531,66 @@ const App = () => {
         }
 
         .dev-tag { font-size: 0.8rem; color: var(--muted); }
+        /* --- MOBILE RESPONSIVE FIXES --- */
+        @media (max-width: 768px) {
+          /* Stack layout vertically */
+          .layout {
+            flex-direction: column;
+          }
+          
+          /* Change sidebar into a top navigation bar */
+          .sidebar {
+            position: relative;
+            width: 100%;
+            min-height: auto;
+            border-right: none;
+            border-bottom: 1px solid var(--border);
+            padding: 20px;
+          }
+          
+          /* Make navigation items sit side-by-side */
+          .nav {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+          }
+          .nav-item { padding: 8px 12px; }
+          .logo-sub { margin-bottom: 20px; text-align: center; }
+          .logo { text-align: center; }
+          
+          /* Put tone buttons in a row */
+          .sidebar-label { text-align: center; margin-top: 10px; }
+          .tone-btn {
+            width: 31%;
+            display: inline-block;
+            margin: 1%;
+            text-align: center;
+            padding: 8px 4px;
+          }
+          
+          /* Fix the main content area */
+          .main {
+            margin-left: 0;
+            width: 100%;
+            padding: 20px;
+          }
+          
+          /* Make grids stack vertically instead of side-by-side */
+          .comparison-grid, 
+          .history-texts, 
+          .features-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+          }
+          
+          /* Shrink text areas slightly for mobile */
+          textarea { height: 160px; }
+          .about-title { font-size: 2rem; }
+          
+          /* Hide character counter on mobile to save screen space */
+          .char-counter { display: none; }
+        }
       `}</style>
 
       <div className="layout">
